@@ -34,7 +34,6 @@ export const login = async (req: Request, res: Response) => {
           const id = user._id;
         } else {
           console.log("got here 6");
-          throw "the password is incorrect";
         }
       });
     }
