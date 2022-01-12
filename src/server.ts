@@ -21,6 +21,7 @@ app.use(cors(corsOptions));
 app.use("/users", userRouter);
 app.use("/shifts", shiftRouter);
 
+connectToShiftsDatabase();
 connectToUsersDatabase()
   .then(() => {
     app.listen(port, () => {
