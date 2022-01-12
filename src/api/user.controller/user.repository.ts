@@ -31,7 +31,7 @@ export const login = async (req: Request, res: Response) => {
       bcrypt.compare(req.body.password, user.password, (err, resp) => {
         if (resp) {
           console.log("got here 5");
-          const id = user._id;
+          res.status(200).send(user);
         } else {
           console.log("got here 6");
         }
