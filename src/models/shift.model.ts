@@ -1,32 +1,12 @@
-import { Document, Schema, model } from "mongoose";
+import { ObjectId } from "mongodb";
 
-export interface IShift extends Document {
-  _id: String;
-  fullName: String;
-  role: String;
-  password: String;
+export default class Shift {
+  constructor(
+    public _id: ObjectId,
+    public shiftDate: string,
+    public shiftName: string,
+    public shiftPerson: string,
+    public shiftStartTime: string,
+    public shiftEndTime: string
+  ) {}
 }
-
-const user: Schema = new Schema(
-  {
-    _id: {
-      type: String,
-      required: true,
-    },
-    fullName: {
-      type: String,
-      required: true,
-    },
-    role: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-  },
-  { versionKey: false }
-);
-
-export default model<IShift>("Shift", shift);

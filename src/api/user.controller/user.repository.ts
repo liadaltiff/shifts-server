@@ -16,24 +16,17 @@ export const getAllUsers = async (_req: Request, res: Response) => {
 };
 // GET ONE
 export const login = async (req: Request, res: Response) => {
-  console.log("got here 1");
-
   try {
-    console.log("got here 2");
     const user = (await collections.users?.findOne({
       _id: req.body._id,
     })) as User;
     if (!user) {
-      console.log("got here 3");
       throw "can`t find that user";
     } else {
-      console.log("got here 4");
       bcrypt.compare(req.body.password, user.password, (err, resp) => {
         if (resp) {
-          console.log("got here 5");
           res.status(200).send(user);
         } else {
-          console.log("got here 6");
         }
       });
     }

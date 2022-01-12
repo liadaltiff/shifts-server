@@ -1,11 +1,12 @@
+import express from "express";
 import Router from "express";
+export const shiftRouter = express.Router();
 
-import { createShift, getAllShifts, getOneShift } from "./shift.repository";
+import { createShift, getAllShifts } from "./shift.repository";
 
-const shiftRouter = Router();
+shiftRouter.use(express.json());
 
 shiftRouter.route("/").get(getAllShifts).post(createShift);
-shiftRouter.route("/shifts").get(getAllShifts);
-shiftRouter.route("/:shiftId").get(getOneShift);
+shiftRouter.route("/").get(getAllShifts);
 
 export default shiftRouter;
