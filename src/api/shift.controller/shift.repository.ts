@@ -34,10 +34,14 @@ export const getAllShiftsByShiftPerson = async (
 export const getOneShiftByDate = async (req: Request, res: Response) => {
   try {
     const { dateProp } = req.params;
-    const shifts = (await collections.shifts
+    const shifts = await collections.shifts
       ?.find({ dateProp: dateProp })
-      .toArray()) as unknown as Shift[];
-    res.status(200).send(shifts);
+      .toArray();
+    if (shifts && shifts.length !== 0) {
+      res.status(200).send(shifts[0]);
+    } else {
+      res.status(400).send();
+    }
   } catch (error: any) {
     res.status(500).send(error.message);
   }
