@@ -64,9 +64,6 @@ export const createShift: RequestHandler = async (req, res) => {
       upsert: true,
     });
 
-    // const newBlah = await collections.shifts?.findOne({ dateProp });
-    // console.log("blah blah is", newBlah);
-
     res.status(201).send(`Successfully created a new shift`);
   } catch (error: any) {
     console.error(error);
