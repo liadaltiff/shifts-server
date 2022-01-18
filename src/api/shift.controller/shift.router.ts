@@ -12,8 +12,7 @@ import {
 shiftRouter.use(express.json());
 
 shiftRouter.route("/").get(getAllShifts).post(createShift);
-shiftRouter.route("/").get(getAllShifts);
-shiftRouter.route("/shiftperson/:shiftPerson").get(getAllShiftsByShiftPerson);
+shiftRouter.route("/shiftperson/:shiftPersonId").get(getAllShiftsByShiftPerson);
 shiftRouter.route("/date/:dateProp").get(getOneShiftByDate);
 
 export default shiftRouter;

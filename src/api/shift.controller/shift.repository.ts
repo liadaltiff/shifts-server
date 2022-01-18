@@ -1,12 +1,9 @@
 import Shift from "../../models/shift.model";
-import { ObjectId } from "mongodb";
 import { collections } from "../../DB/mongoConnectionShifts.service";
-import express, { Request, Response, NextFunction } from "express";
-import bcrypt from "bcryptjs";
+import { RequestHandler, Request, Response } from "express";
 
 export const getAllShifts = async (_req: Request, res: Response) => {
   try {
-    //      ?.find({}, { projection: { password: 0 } })
     const shifts = (await collections.shifts
       ?.find({})
       .toArray()) as unknown as Shift[];
@@ -21,9 +18,9 @@ export const getAllShiftsByShiftPerson = async (
   res: Response
 ) => {
   try {
-    const { shiftPerson } = req.params;
+    const { shiftPersonId } = req.params;
     const shifts = (await collections.shifts
-      ?.find({ shiftPerson: shiftPerson })
+      ?.find({ shiftPersonId: shiftPersonId })
       .toArray()) as unknown as Shift[];
     res.status(200).send(shifts);
   } catch (error: any) {
@@ -34,9 +31,7 @@ export const getAllShiftsByShiftPerson = async (
 export const getOneShiftByDate = async (req: Request, res: Response) => {
   try {
     const { dateProp } = req.params;
-    const shifts = await collections.shifts
-      ?.find({ dateProp: dateProp })
-      .toArray();
+    const shifts = await collections.shifts?.find({ dateProp }).toArray();
     if (shifts && shifts.length !== 0) {
       res.status(200).send(shifts[0]);
     } else {
@@ -57,16 +52,21 @@ export const getOneShift = async (req: Request, res: Response) => {
       console.log("theres an error");
     }
   } catch (error: any) {
-    console.log("got here 7");
     res.status(500).send(error.message);
   }
 };
 
 // POST
-export const createShift = async (req: Request, res: Response) => {
+export const createShift: RequestHandler = async (req, res) => {
   try {
-    const newShift = req.body as Shift;
-    await collections.shifts?.insertOne(newShift);
+    const { dateProp } = req.body;
+    await collections.shifts?.replaceOne({ dateProp }, req.body, {
+      upsert: true,
+    });
+
+    // const newBlah = await collections.shifts?.findOne({ dateProp });
+    // console.log("blah blah is", newBlah);
+
     res.status(201).send(`Successfully created a new shift`);
   } catch (error: any) {
     console.error(error);

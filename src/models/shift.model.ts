@@ -6,6 +6,7 @@ export default class Shift {
     public shiftDate: string,
     public shiftName: string,
     public shiftPerson: string,
+    public shiftPersonId: string,
     public shiftStartTime: string,
     public shiftEndTime: string
   ) {}
