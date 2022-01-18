@@ -7,12 +7,14 @@ import {
   getAllShifts,
   getOneShiftByDate,
   getAllShiftsByShiftPerson,
+  tradeShift,
 } from "./shift.repository";
 
 shiftRouter.use(express.json());
 
 shiftRouter.route("/").get(getAllShifts).post(createShift);
 shiftRouter.route("/shiftperson/:shiftPersonId").get(getAllShiftsByShiftPerson);
+shiftRouter.route("/date/:dateProp").patch(tradeShift);
 shiftRouter.route("/date/:dateProp").get(getOneShiftByDate);
 
 export default shiftRouter;

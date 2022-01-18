@@ -8,6 +8,7 @@ export default class Shift {
     public shiftPerson: string,
     public shiftPersonId: string,
     public shiftStartTime: string,
-    public shiftEndTime: string
+    public shiftEndTime: string,
+    public isTradable: boolean
   ) {}
 }
