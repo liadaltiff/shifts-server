@@ -95,8 +95,6 @@ export const offerShift: RequestHandler = async (req, res) => {
 
 export const getTradedShift: RequestHandler = async (req, res) => {
   try {
-    console.log(req.body);
-
     const { traded } = req.body;
     const { shiftPerson } = req.body;
     const { shiftPersonId } = req.body;
