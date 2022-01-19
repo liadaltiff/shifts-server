@@ -30,8 +30,8 @@ export const getAllShiftsByShiftPerson = async (
 
 export const getOneShiftByDate = async (req: Request, res: Response) => {
   try {
-    const { dateProp } = req.params;
-    const shifts = await collections.shifts?.find({ dateProp }).toArray();
+    const { shiftDate } = req.params;
+    const shifts = await collections.shifts?.find({ shiftDate }).toArray();
     if (shifts && shifts.length !== 0) {
       res.status(200).send(shifts[0]);
     } else {
@@ -60,12 +60,12 @@ export const getOneShiftByDate = async (req: Request, res: Response) => {
 export const createShift: RequestHandler = async (req, res) => {
   try {
     const newShift = req.body as Shift;
-    newShift.isTradable = false;
+    newShift.traded = false;
 
-    const { dateProp } = req.body;
-    console.log("dateprop is:", dateProp);
+    const { shiftDate } = req.body;
+    console.log("shiftDate is:", shiftDate);
 
-    await collections.shifts?.replaceOne({ dateProp }, req.body, {
+    await collections.shifts?.replaceOne({ shiftDate }, req.body, {
       upsert: true,
     });
 
@@ -76,14 +76,37 @@ export const createShift: RequestHandler = async (req, res) => {
   }
 };
 
-export const tradeShift = async (req: Request, res: Response) => {
+export const offerShift: RequestHandler = async (req, res) => {
   try {
-    console.log("got here");
-    // const { isTradable } = req.body;
-    const { dateProp } = req.params;
-    console.log("dateprop is:", dateProp);
+    const { traded } = req.body;
+    const { shiftDate } = req.params;
 
-    // await collections.shifts?.findOneAndUpdate({ dateProp }, { x });
+    await collections.shifts?.findOneAndUpdate(
+      { shiftDate },
+      { $set: { traded } }
+    );
+
+    res.status(201).send(`Successfully updated the shift`);
+  } catch (error: any) {
+    console.error(error);
+    res.status(400).send(error.message);
+  }
+};
+
+export const getTradedShift: RequestHandler = async (req, res) => {
+  try {
+    console.log(req.body);
+
+    const { traded } = req.body;
+    const { shiftPerson } = req.body;
+    const { shiftPersonId } = req.body;
+
+    const { shiftDate } = req.params;
+
+    await collections.shifts?.findOneAndUpdate(
+      { shiftDate },
+      { $set: { traded, shiftPerson, shiftPersonId } }
+    );
 
     res.status(201).send(`Successfully updated the shift`);
   } catch (error: any) {
