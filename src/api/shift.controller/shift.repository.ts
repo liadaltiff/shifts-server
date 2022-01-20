@@ -1,6 +1,8 @@
 import Shift from "../../models/shift.model";
 import { collections } from "../../DB/mongoConnectionShifts.service";
 import { RequestHandler, Request, Response } from "express";
+import { Server } from "socket.io";
+import { io } from "../../server";
 
 export const getAllShifts = async (_req: Request, res: Response) => {
   try {
@@ -87,6 +89,7 @@ export const offerShift: RequestHandler = async (req, res) => {
     );
 
     res.status(201).send(`Successfully updated the shift`);
+    io.emit("new-notification");
   } catch (error: any) {
     console.error(error);
     res.status(400).send(error.message);

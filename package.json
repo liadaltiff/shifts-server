@@ -166,6 +166,7 @@
     "signal-exit": "^3.0.6",
     "sliced": "^1.0.1",
     "smart-buffer": "^4.2.0",
+    "socket.io": "^4.4.1",
     "socks": "^2.6.1",
     "sparse-bitfield": "^3.0.3",
     "statuses": "^1.5.0",
