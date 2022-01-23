@@ -1,8 +1,9 @@
 import Shift from "../../models/shift.model";
-import { collections } from "../../DB/mongoConnectionShifts.service";
+import { collections } from "../../DB/mongoConnection.service";
 import { RequestHandler, Request, Response } from "express";
 import { Server } from "socket.io";
 import { io } from "../../server";
+import jwt from "jsonwebtoken";
 
 export const getAllShifts = async (_req: Request, res: Response) => {
   try {
@@ -44,20 +45,6 @@ export const getOneShiftByDate = async (req: Request, res: Response) => {
   }
 };
 
-// GET ONE
-// export const getOneShift = async (req: Request, res: Response) => {
-//   try {
-//     const shift = (await collections.shifts?.findOne({
-//       _id: req.body._id,
-//     })) as Shift;
-//     if (!shift) {
-//       console.log("theres an error");
-//     }
-//   } catch (error: any) {
-//     res.status(500).send(error.message);
-//   }
-// };
-
 // POST
 export const createShift: RequestHandler = async (req, res) => {
   try {
@@ -65,7 +52,6 @@ export const createShift: RequestHandler = async (req, res) => {
     newShift.traded = false;
 
     const { shiftDate } = req.body;
-    console.log("shiftDate is:", shiftDate);
 
     await collections.shifts?.replaceOne({ shiftDate }, req.body, {
       upsert: true,

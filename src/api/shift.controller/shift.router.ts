@@ -19,9 +19,6 @@ shiftRouter.route("/date/:shiftDate/trade").patch(offerShift);
 shiftRouter.route("/date/:shiftDate/traded").put(getTradedShift);
 shiftRouter.route("/date/:shiftDate").get(getOneShiftByDate);
 
-// shiftRouter.get("/traded", async (req, res) => collection.shifts.find({traded: true}))
+//jwtAuthz(["Soldier"]
 
-// /shift/:id/traded - Wants to trade shift ( changes traded prop ) + /shift/:id/trade - Trades shifts
-// Route that changes only traded -> PATCH shift/date/:shiftDate/traded
-// Route that trades shift -> PATCH shift/date/:shiftDate/trade -> body: { name: dynamic, id: dynamic, traded: *false* }
 export default shiftRouter;

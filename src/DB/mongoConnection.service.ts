@@ -1,14 +1,13 @@
 import * as mongoDB from "mongodb";
-import * as dotenv from "dotenv";
+import Shift from "../models/shift.model";
+import User from "../models/user.model";
 
-// Global Variables
-export const collections: { users?: mongoDB.Collection } = {};
-const USERS_COLLECTION_NAME = "users";
+export const collections: {
+  users?: mongoDB.Collection<User>;
+  shifts?: mongoDB.Collection<Shift>;
+} = {};
 
-// Initialize Connection
-export async function connectToUsersDatabase() {
-  dotenv.config();
-
+export async function connectToDatabase() {
   const client: mongoDB.MongoClient = new mongoDB.MongoClient(
     process.env.DB_CONN_STRING!
   );
@@ -17,13 +16,18 @@ export async function connectToUsersDatabase() {
 
   const db: mongoDB.Db = client.db(process.env.DB_NAME);
 
-  const usersCollection: mongoDB.Collection = db.collection(
-    USERS_COLLECTION_NAME
+  const uesrsCollection: mongoDB.Collection<User> = db.collection(
+    process.env.USERS_COLLECTION_NAME!
   );
 
-  collections.users = usersCollection;
+  const shiftsCollection: mongoDB.Collection<Shift> = db.collection(
+    process.env.SHIFTS_COLLECTION_NAME!
+  );
+
+  collections.users = uesrsCollection;
+  collections.shifts = shiftsCollection;
 
   console.log(
-    `Successfully connected to database: ${db.databaseName} and collection: ${usersCollection.collectionName}`
+    `Successfully connected to database: ${db.databaseName} and collection: ${shiftsCollection.collectionName}`
   );
 }
