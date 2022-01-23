@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 import { collections } from "../../DB/mongoConnection.service";
 import express, { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export const getAllUsers = async (_req: Request, res: Response) => {
   try {
@@ -14,6 +15,7 @@ export const getAllUsers = async (_req: Request, res: Response) => {
     res.status(500).send(error.message);
   }
 };
+
 // GET ONE
 export const login = async (req: Request, res: Response) => {
   try {
@@ -23,15 +25,26 @@ export const login = async (req: Request, res: Response) => {
     if (!user) {
       throw "can`t find that user";
     } else {
-      bcrypt.compare(req.body.password, user.password, (err, resp) => {
-        if (resp) {
-          res.status(200).send(user);
-        } else {
+      bcrypt.compare(
+        req.body.password,
+        user.password as string,
+        (err, resp) => {
+          if (resp) {
+            delete user?.password;
+            const token = jwt.sign(user, process.env.JWT_SECRET!, {
+              expiresIn: "1h",
+            });
+            res.cookie("token", token, {
+              maxAge: 900000,
+              httpOnly: true,
+            });
+            res.status(200).send(user);
+          } else {
+          }
         }
-      });
+      );
     }
   } catch (error: any) {
-    console.log("got here 7");
     res.status(500).send(error.message);
   }
 };
@@ -41,7 +54,7 @@ export const createUser = async (req: Request, res: Response) => {
   try {
     const newUser = req.body as User;
     bcrypt.genSalt(10, function (err, salt) {
-      bcrypt.hash(newUser.password, salt, async function (err, hash) {
+      bcrypt.hash(newUser.password as string, salt, async function (err, hash) {
         newUser.password = hash;
         newUser.role = "Soldier";
         await collections.users?.insertOne(newUser);
@@ -50,7 +63,6 @@ export const createUser = async (req: Request, res: Response) => {
     res.status(201).send(`Successfully created a new user`);
   } catch (error: any) {
     console.error(error);
-    console.log("u got here");
     res.status(400).send(error.message);
   }
 };
